@@ -1,5 +1,6 @@
 #include <stdio.h>
 void right_shift(int *a, int N, int K) {
+    K = N + K % N;
     int b[N];
     for (int i = 0; i < N; i++) {
         b[(i + K) % N] = a[i];
