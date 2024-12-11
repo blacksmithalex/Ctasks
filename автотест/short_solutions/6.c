@@ -3,25 +3,25 @@
 #include <math.h>
 
 int Len(FILE *f);
-void Scan(FILE *f, int *arr, int len);
-void Sort(int *arr, int len);
-int Func(int *A, int *B, int a, int b);
+void Scan(FILE *f, double *arr, int len);
+void Sort(double *arr, int len);
+int Func(double *A, double *B, int a, int b);
 
 int Len(FILE *f) {
     int len = 0;
-    int c;
-    while (fscanf(f, "%d", &c) == 1) 
+    double c;
+    while (fscanf(f, "%lf", &c) == 1) 
         len++;
     return len;
 }
 
-void Scan(FILE *f, int *arr, int len) {
+void Scan(FILE *f, double *arr, int len) {
     int i;
     for (i = 0; i < len; i++) 
-        fscanf(f, "%d", &arr[i]);
+        fscanf(f, "%lf", &arr[i]);
 }
 
-void Sort(int *arr, int len) {
+void Sort(double *arr, int len) {
     int i, j, t;
     for (i = 0; i < len - 1; i++)
         for (j = 0; j < len - 1; j++)
@@ -32,33 +32,21 @@ void Sort(int *arr, int len) {
             }
 }
 
-int Func(int *A, int *B, int a, int b) {
-    int start = B[0];
-    int end = A[a - 1];
-    int uniq = 0;
-    for (int val = start; val <= end; val++) {
-        int flag = 0;
-        for (int i = 0; i < a; i++) {
-            if (A[i] == val) {
-                flag = 1;
-                break;
-            }
-        }
-        for (int i = 0; i < b; i++) {
-            if (B[i] == val) {
-                flag = 1;
-                break;
-            }
-        }
-        if (flag == 1) uniq += 1;
+int Func(double *A, double *B, int a, int b) {
+    int min_len = (a < b) ? a : b;
+    double prev_diff = fabs(A[0] - B[0]);
+    for (int i = 1; i < min_len; i++) {
+        double diff = fabs(A[i] - B[i]);
+        if (diff > prev_diff) return 0;
+        prev_diff = diff;
     }
-    return uniq;
+    return 1;
 }
 
 int main(void) {
     FILE *ina, *inb, *out;
-    int a, b, uniq;
-    int *A, *B;
+    int a, b, check;
+    double *A, *B;
     ina = fopen("ina.txt", "r");
     inb = fopen("inb.txt", "r");
     out = fopen("output.txt", "w");
@@ -83,14 +71,17 @@ int main(void) {
     }
     rewind(ina);
     rewind(inb);
-    A = (int*)malloc(a * sizeof(int));
-    B = (int*)malloc(b * sizeof(int));
+    A = (double*)malloc(a * sizeof(double));
+    B = (double*)malloc(b * sizeof(double));
     Scan(ina, A, a);
     Scan(inb, B, b);
     Sort(A, a);
     Sort(B, b);
-    uniq = Func(A, B, a, b);
-    fprintf(out, "%d", uniq);
+    check = Func(A, B, a, b);
+    if (check)
+        fprintf(out, "YES");
+    else
+        fprintf(out, "NO");
     fclose(ina);
     fclose(inb);
     fclose(out);

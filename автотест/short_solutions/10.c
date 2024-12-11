@@ -33,31 +33,22 @@ void Sort(int *arr, int len) {
 }
 
 int Func(int *A, int *B, int a, int b) {
-    int start = B[0];
-    int end = A[a - 1];
-    int uniq = 0;
-    for (int val = start; val <= end; val++) {
+    if (a == 1) return 1;
+    for (int i = 0; i < a - 1; i++) {
+        int start = A[i];
+        int end = A[i + 1];
         int flag = 0;
-        for (int i = 0; i < a; i++) {
-            if (A[i] == val) {
-                flag = 1;
-                break;
-            }
+        for (int j = 0; j < b; j++) {
+            if (B[j] > start && B[j] < end) flag = 1;
         }
-        for (int i = 0; i < b; i++) {
-            if (B[i] == val) {
-                flag = 1;
-                break;
-            }
-        }
-        if (flag == 1) uniq += 1;
+        if (flag == 0) return 0;
     }
-    return uniq;
+    return 1;
 }
 
 int main(void) {
     FILE *ina, *inb, *out;
-    int a, b, uniq;
+    int a, b, check;
     int *A, *B;
     ina = fopen("ina.txt", "r");
     inb = fopen("inb.txt", "r");
@@ -89,8 +80,11 @@ int main(void) {
     Scan(inb, B, b);
     Sort(A, a);
     Sort(B, b);
-    uniq = Func(A, B, a, b);
-    fprintf(out, "%d", uniq);
+    check = Func(A, B, a, b);
+    if (check)
+        fprintf(out, "YES");
+    else
+        fprintf(out, "NO");
     fclose(ina);
     fclose(inb);
     fclose(out);
