@@ -64,16 +64,18 @@ int main() {
 }
 
 int binary_search_position(float* array, int size, float x) {
-    int left = 0, right = size - 1, mid;
-
-    while (left <= right) {
-        mid = left + (right - left) / 2;
-        if (array[mid] < x) {
-            left = mid + 1;
+    //left binary search: если элемент x есть, то возвращает его первое появление (индекс)
+    // если элемента нет, то возвращает индекс первого элемента, который больше данного
+    int l = -1;
+    int r = size - 1;
+    int c;
+    while (l + 1 != r) {
+        c = (l + r) / 2;
+        if (array[c] < x) {
+            l = c;
         } else {
-            right = mid - 1;
+            r = c;
         }
     }
-
-    return left;
+    return r;
 }
