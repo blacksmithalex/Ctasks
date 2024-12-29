@@ -70,12 +70,15 @@ void write_array_to_file(const char *filename, int *array, int size) {
 }
 
 int compare(const void *a, const void *b) {
-    return (*(int *)a - *(int *)b);
+    const int *A  = (const int *)a;
+    const int *B = (const int *)b;
+    return (*A - *B);
 }
 
 void group_and_sort(int *array, int size) {
-    int *positive = malloc(size * sizeof(int));
-    int *negative = malloc(size * sizeof(int));
+    int *positive, *negative;
+    positive = (int*)malloc(size * sizeof(int));
+    negative = (int*)malloc(size * sizeof(int));
     int pos_count = 0, neg_count = 0;
 
     for (int i = 0; i < size; i++) {
