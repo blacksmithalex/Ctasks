@@ -11,12 +11,12 @@ int main() {
     //0 <= i + j <= n - 1 + m - 1
     for (int diag = 0; diag <= n - 1 + m - 1; diag++){
         for (int i = 0; i < n; i++){
-                int j = diag - i;
-                if (j >= 0) {
-                    A[i][j] = value;
-                    value++;
-                }
+            int j = diag - i;
+            if (0 <= i && i < n && 0 <= j && j < m) {
+                A[i][j] = value;
+                value++;
             }
+        }
     }
     
 
