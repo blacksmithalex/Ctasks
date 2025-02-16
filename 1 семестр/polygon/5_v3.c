@@ -13,7 +13,7 @@ double distance(Point a, Point b) {
     return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
 }
 
-// Функция нахождения максимального диаметра (методом вращающихся калиперов)
+// Функция нахождения максимального диаметра (описанной окружности)
 double max_diameter(Point *polygon, int n) {
     double max_dist = 0.0;
     for (int i = 0; i < n; i++) {
@@ -27,49 +27,59 @@ double max_diameter(Point *polygon, int n) {
     return max_dist;
 }
 
-// Функция нахождения центра вписанной окружности (пересечение биссектрис)
-Point incenter(Point *polygon, int n) {
-    double perimeter = 0.0;
-    double x = 0.0, y = 0.0;
-    
-    for (int i = 0; i < n; i++) {
-        Point a = polygon[i];
-        Point b = polygon[(i + 1) % n];
-        double side_length = distance(a, b);
-        perimeter += side_length;
-        
-        x += side_length * (a.x + b.x) / 2.0;
-        y += side_length * (a.y + b.y) / 2.0;
-    }
+// Функция нахождения пересечения биссектрис двух соседних углов
+Point bisector_intersection(Point a, Point b, Point c) {
+    double ab = distance(a, b);
+    double bc = distance(b, c);
 
-    x /= perimeter;
-    y /= perimeter;
-    
-    Point incenter = {x, y};
-    return incenter;
+    // Центр пересечения биссектрис (средневзвешенная точка)
+    double x = (a.x * bc + c.x * ab) / (ab + bc);
+    double y = (a.y * bc + c.y * ab) / (ab + bc);
+
+    return (Point){x, y};
 }
 
-// Функция нахождения радиуса вписанной окружности (минимальный диаметр)
-double min_diameter(Point *polygon, int n) {
-    Point center = incenter(polygon, n);  // Находим центр вписанной окружности
-    double min_dist = 1e9;  // Начальное большое значение
+// Функция нахождения расстояния от точки до стороны (отрезка)
+double point_to_segment_distance(Point p, Point a, Point b) {
+    double A = b.y - a.y;
+    double B = a.x - b.x;
+    double C = -(A * a.x + B * a.y);
 
-    // Ищем минимальное расстояние от инцентра до сторон
+    return fabs(A * p.x + B * p.y + C) / sqrt(A * A + B * B);
+}
+
+// Функция нахождения максимального возможного радиуса вписанной окружности (D_min / 2)
+double min_diameter(Point *polygon, int n) {
+    double max_radius = 0.0;  // Инициализируем максимальный радиус
+
+    // Перебираем пары соседних вершин и ищем пересечение биссектрис
     for (int i = 0; i < n; i++) {
         Point a = polygon[i];
         Point b = polygon[(i + 1) % n];
+        Point c = polygon[(i + 2) % n];
 
-        // Вычисляем расстояние от центра до отрезка AB (формула расстояния от точки до прямой)
-        double A = b.y - a.y;
-        double B = a.x - b.x;
-        double C = -(A * a.x + B * a.y);
-        double dist = fabs(A * center.x + B * center.y + C) / sqrt(A * A + B * B);
+        // Находим центр пересечения биссектрис
+        Point center = bisector_intersection(a, b, c);
 
-        if (dist < min_dist) {
-            min_dist = dist;
+        // Ищем минимальное расстояние от центра до всех сторон
+        double min_radius = 1e9;
+        for (int j = 0; j < n; j++) {
+            Point p1 = polygon[j];
+            Point p2 = polygon[(j + 1) % n];
+
+            double dist = point_to_segment_distance(center, p1, p2);
+            if (dist < min_radius) {
+                min_radius = dist;
+            }
+        }
+
+        // Обновляем максимальный радиус (D_min / 2)
+        if (min_radius > max_radius) {
+            max_radius = min_radius;
         }
     }
-    return (min_dist * 2);  // Умножаем на 2, чтобы получить полный диаметр
+
+    return (max_radius * 2) * (max_radius * 2);  // Умножаем на 2, чтобы получить D_min
 }
 
 int main() {
