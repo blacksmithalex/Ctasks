@@ -42,8 +42,8 @@ int main(void) {
     fclose(in);
 
     // Флаги для строк и столбцов
-    int *rows_with_segment = (int *)calloc(L, sizeof(int));
-    int *cols_with_segment = (int *)calloc(K, sizeof(int));
+    int *rows_with_segment = (int *)malloc(L * sizeof(int));
+    int *cols_with_segment = (int *)malloc(K * sizeof(int));
     if (!rows_with_segment || !cols_with_segment) {
         fprintf(out, "ERROR\n");
         free(A);
@@ -108,6 +108,7 @@ int main(void) {
 
     // Очистка
     free(A);
+    free(Acopy);
     free(rows_with_segment);
     free(cols_with_segment);
     fclose(out);

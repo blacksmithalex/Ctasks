@@ -3,7 +3,6 @@
 
 int main(void) {
     int M, N, L, K;
-    double *A = NULL;
     FILE *in = fopen("data.txt", "r");
     FILE *out = fopen("res.txt", "w");
 
@@ -22,7 +21,7 @@ int main(void) {
         return -1;
     }
 
-    A = (double *)malloc(L * K * sizeof(double));
+    int *A = (int*)malloc(L * K * sizeof(double));
     if (!A) {
         fprintf(out, "ERROR\n");
         fclose(in);
@@ -31,7 +30,7 @@ int main(void) {
     }
 
     for (int i = 0; i < L * K; i++) {
-        if (fscanf(in, "%lf", &A[i]) != 1) {
+        if (fscanf(in, "%d", &A[i]) != 1) {
             fprintf(out, "ERROR\n");
             free(A);
             fclose(in);
@@ -42,8 +41,8 @@ int main(void) {
     fclose(in);
 
     // Флаги для строк и столбцов
-    int *rows_with_mod = (int *)calloc(L, sizeof(int));
-    int *cols_with_mod = (int *)calloc(K, sizeof(int));
+    int *rows_with_mod = (int *)malloc(L * sizeof(int));
+    int *cols_with_mod = (int *)malloc(K * sizeof(int));
     if (!rows_with_mod || !cols_with_mod) {
         fprintf(out, "ERROR\n");
         free(A);
@@ -64,17 +63,23 @@ int main(void) {
         }
     }
 
+    int *Acopy = (int *)malloc(L * K * sizeof(int));
+    for (int i = 0; i < L; i++) {
+        for (int j = 0; j < K; j++) {
+            Acopy[i * K + j] = A[i * K + j];
+        }
+    }
+
     // Модификация элементов по условиям задачи
     for (int i = 0; i < L; i++) {
         for (int j = 0; j < K; j++) {
             if (rows_with_mod[i] && cols_with_mod[j]) {
                 int found = 0;
                 for (int t = 0; t < j; t++) {
-                    if (A[i * K + t] == A[i * K + j]) {
+                    if (Acopy[i * K + t] == Acopy[i * K + j]) {
                         found = 1;
                         break;
                     }
-                    // printf("%d\n", found);
                 }
                 A[i * K + j] = found;
             }
@@ -85,13 +90,14 @@ int main(void) {
     fprintf(out, "%d %d %d %d\n", M, N, L, K);
     for (int i = 0; i < L; i++) {
         for (int j = 0; j < K; j++) {
-            fprintf(out, "%.0lf ", A[i * K + j]);
+            fprintf(out, "%d ", A[i * K + j]);
         }
         fprintf(out, "\n");
     }
 
     // Очистка
     free(A);
+    free(Acopy);
     free(rows_with_mod);
     free(cols_with_mod);
     fclose(out);
