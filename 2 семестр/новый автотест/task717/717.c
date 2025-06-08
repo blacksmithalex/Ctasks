@@ -42,11 +42,11 @@ int main(void) {
     fclose(in);
 
     // Флаги для строк и столбцов
-    int *cols_with_mod = (int *)malloc(K * sizeof(int));
-    if (!cols_with_mod) {
+    int *cols_with_segment = (int *)malloc(K * sizeof(int));
+    if (!cols_with_segment) {
         fprintf(out, "ERROR\n");
         free(A);
-        free(cols_with_mod);
+        free(cols_with_segment);
         fclose(out);
         return -1;
     }
@@ -56,20 +56,22 @@ int main(void) {
     for (int i = 0; i < L; i++) {
         for (int j = 0; j < K; j++) {
             int val = (int)A[i * K + j];
-            if (val % M == N) {
-                cols_with_mod[j] = 1;
+            if (val >= M && val <= N) {
+                cols_with_segment[j] = 1;
             }
         }
     }
     for (int j = 0; j < K; j++){
-        if (cols_with_mod[j] == 1)
+        if (cols_with_segment[j] == 1)
             count_good_cols++;
     }
+    printf("%d", count_good_cols);
+
 
     int *inds = (int *)malloc(count_good_cols * sizeof(int));
     int cur_ind = 0;
     for (int j = 0; j < K; j++){
-        if (cols_with_mod[j]){
+        if (cols_with_segment[j] == 1){
             inds[cur_ind] = j;
             cur_ind++;
         }
@@ -79,7 +81,7 @@ int main(void) {
     for (int i = 0; i < L; i++) {
         for (int iter = 0; iter < count_good_cols; iter++){
             for (int j = 0; j < count_good_cols - iter - 1; j++){
-                if (A[i * K + inds[j]] > A[i * K + inds[j + 1]]){
+                if (A[i * K + inds[j]] % M > A[i * K + inds[j + 1]] % M){
                     int tmp = A[i * K + inds[j]];
                     A[i * K + inds[j]] = A[i * K + inds[j + 1]];
                     A[i * K + inds[j + 1]] = tmp;
@@ -99,7 +101,7 @@ int main(void) {
 
     // Очистка
     free(A);
-    free(cols_with_mod);
+    free(cols_with_segment);
     fclose(out);
 
     return 0;
