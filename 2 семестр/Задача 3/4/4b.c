@@ -4,7 +4,8 @@
 #define MAX_SIZE 10
 
 // Рекурсивное вычисление определителя
-int determinant(int **matrix, int n) {
+int determinant(int **matrix, int n)
+{
     if (n == 1)
         return matrix[0][0];
 
@@ -19,13 +20,17 @@ int determinant(int **matrix, int n) {
     for (int i = 0; i < n - 1; i++)
         submatrix[i] = (int *)malloc((n - 1) * sizeof(int));
 
-    for (int k = 0; k < n; k++) {
+    for (int k = 0; k < n; k++)
+    {
         // Формируем подматрицу
         int subi = 0;
-        for (int i = 1; i < n; i++) {
+        for (int i = 1; i < n; i++)
+        {
             int subj = 0;
-            for (int j = 0; j < n; j++) {
-                if (j == k) continue;
+            for (int j = 0; j < n; j++)
+            {
+                if (j == k)
+                    continue;
                 submatrix[subi][subj++] = matrix[i][j];
             }
             subi++;
@@ -43,15 +48,18 @@ int determinant(int **matrix, int n) {
     return det;
 }
 
-int main() {
+int main()
+{
     FILE *fin = fopen("input.txt", "r");
-    if (!fin) {
+    if (!fin)
+    {
         perror("Ошибка открытия input.txt");
         return 1;
     }
 
     int n;
-    if (fscanf(fin, "%d", &n) != 1 || n <= 0 || n > MAX_SIZE) {
+    if (fscanf(fin, "%d", &n) != 1 || n <= 0 || n > MAX_SIZE)
+    {
         fprintf(stderr, "Ошибка: некорректная размерность матрицы\n");
         fclose(fin);
         return 1;
@@ -65,7 +73,8 @@ int main() {
     // Считываем матрицу из файла
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
-            if (fscanf(fin, "%d", &matrix[i][j]) != 1) {
+            if (fscanf(fin, "%d", &matrix[i][j]) != 1)
+            {
                 fprintf(stderr, "Ошибка чтения элемента [%d][%d]\n", i, j);
                 fclose(fin);
                 return 1;
@@ -76,7 +85,8 @@ int main() {
     int det = determinant(matrix, n);
 
     FILE *fout = fopen("output.txt", "w");
-    if (!fout) {
+    if (!fout)
+    {
         perror("Ошибка открытия output.txt");
         return 1;
     }

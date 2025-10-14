@@ -67,7 +67,7 @@ int main(void)
         for (int j = 0; j < K; j++)
         {
             int val = A[i * K + j];
-            if (val >= M && val <= N)
+            if (val >= M && val <= N && cols_with_segment[j] != 1)
             {
                 cols_with_segment[j] = 1;
                 count_good_cols++;
