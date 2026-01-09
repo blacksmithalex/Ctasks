@@ -1,0 +1,106 @@
+vim outer.hpp
+vim inner.hpp
+vim main.cpp
+g++ -E main.cpp 
+g++ main.cpp 
+g++ -E main.cpp 
+vim main.cp
+vim main.cpp
+vim func.cpp
+vim func.hpp
+g++ main.cpp func.cpp
+ls
+./a.out 
+ls
+g++ -c main.cpp
+ls
+g++ -c func.cpp
+ls
+g++ func.o main.o
+./a.out 
+g++ func.o main.o -o prog
+ls
+./prog
+vim Makefile
+ls
+make
+rm prog 
+rm *.o
+ls
+rm a.out 
+ls
+make
+ls
+make
+make clean
+ls
+make
+vim CMakeLists.txt
+ls
+mkdir build
+ls
+cd build/
+ls
+pwd
+cmake ..
+vim ../CMakeLists.txt 
+cmake ..
+ls
+make
+ls
+./prog 
+ls
+./prog 
+echo $?
+make
+./prog 
+echo $?
+ls
+cd ..
+ls
+cd ..
+ls
+cd streams/
+vim main.c
+gcc main.c 
+./a.out 
+gcc main.c 
+./a.out 
+./a.out > out.txt
+ls
+cat out.txt 
+./a.out 2> err.txt
+ls
+cat err.txt 
+rm err.txt out.txt 
+ls
+./a.out 1> out.txt 2> err.txt
+ls
+cat err.txt 
+cat out.txt 
+./a.out | gzip -o out.gz
+gzip -h
+./a.out | gzip > out.gz
+ls
+rm out err.txt 
+ls
+rm out.txt 
+ls
+gunzip out.gz 
+ls
+cat out 
+gcc main.c 
+./a.out 
+gcc main.c 
+./a.out 
+vim read.cpp
+g++ read.cpp 
+ls
+./a.out 
+vim in.txt
+./a.out < in.txt 
+cat in.txt 
+cat in.txt | ./a.out 
+./a.out 
+cmake -generators
+cmake -h
