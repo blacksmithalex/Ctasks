@@ -25,3 +25,11 @@ public:
 
     char* data;
 };
+
+int main() {
+    String str1("abcd");
+    String str2("efg");
+    String str3 = str1 + str2;
+    std::cout << str3 << std::endl;
+    return 0;
+}
