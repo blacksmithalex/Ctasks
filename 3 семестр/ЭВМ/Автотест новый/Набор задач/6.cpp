@@ -35,5 +35,18 @@ public:
 
 private:
     double* data;
-    int numRows, numCols;
+    int numRows;
+    int numCols;
 };
+
+int main(){
+    double* arr1 = new double[6]{1.0, 5.0, 7.0, -1.0, 2.0, 10.0}; 
+    
+    Matrix m1(arr1, 2, 3);
+    Matrix m2(m1);
+    m1.Print();
+    m2.Print();
+
+    delete[] arr1; 
+    return 0;
+}

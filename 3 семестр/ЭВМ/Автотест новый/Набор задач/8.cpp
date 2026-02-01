@@ -1,23 +1,24 @@
+#include <iostream>
+
 class BinaryCounter {
 public:
     BinaryCounter() : count(1) {
         data = new int[1]{0};
     }
 
+    BinaryCounter(const BinaryCounter& other) = delete;
     ~BinaryCounter() { delete[] data; }
 
-    BinaryCounter& operator++() {
-        int i = 0;
-        while (i < count && data[i] == 1) {
-            data[i++] = 0;
-        }
-        if (i == count) {
-            int* nd = new int[count + 1]{};
-            for (int j = 0; j < count; j++) nd[j] = data[j];
-            delete[] data;
-            data = nd;
-            data[count++] = 1;
-        } else data[i] = 1;
+    BinaryCounter& operator=(const BinaryCounter& other) {
+        if (this == &other) return *this;
+
+        delete[] data;          
+        count = other.count;     
+        data = new int[count]; 
+
+        for (int i = 0; i < count; i++)
+            data[i] = other.data[i];
+
         return *this;
     }
 
@@ -31,3 +32,18 @@ private:
     int* data;
     int count;
 };
+
+int main() {
+    BinaryCounter a;
+
+    std::cout << "a = ";
+    a.Print();
+
+    BinaryCounter b;
+    b = a;       
+
+    std::cout << "b = ";
+    b.Print();
+
+    return 0;
+}
