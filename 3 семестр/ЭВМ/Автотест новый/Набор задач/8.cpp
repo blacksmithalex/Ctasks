@@ -5,6 +5,10 @@ public:
     BinaryCounter() : count(1) {
         data = new int[1]{0};
     }
+    BinaryCounter(int* d, int c) : count(c){
+        data = new int[c];
+        for (int i = 0; i < c; i++) data[i] = d[i];
+    }
 
     BinaryCounter(const BinaryCounter& other) = delete;
     ~BinaryCounter() { delete[] data; }
@@ -44,6 +48,11 @@ int main() {
 
     std::cout << "b = ";
     b.Print();
+
+    int arr1[] = {1, 0, 1, 1};
+    BinaryCounter c(arr1, 4);
+    std::cout << "c = ";
+    c.Print();
 
     return 0;
 }

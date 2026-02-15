@@ -1,3 +1,4 @@
+#include <iostream>
 class Decimal {
 public:
     Decimal(int* d, int c) : count(c) {
@@ -20,8 +21,6 @@ public:
         return *this;
     }
 
-    ~Decimal() { delete[] digits; }
-
     Decimal operator+(const Decimal& o) const {
         int carry = 0;
         int n = std::max(count, o.count);
@@ -38,6 +37,25 @@ public:
         return Decimal(r, n);
     }
 
+    ~Decimal() { delete[] digits; }
+
+    void show(){
+        for (int i = count - 1; i >= 0; i--)
+            std::cout << this->digits[i];
+        std::cout << std::endl;
+    }
+
     int* digits;
     int count;
 };
+
+int main(){
+    int arr1[] = {9, 9, 9, 9};
+    int arr2[] = {3, 3, 3};
+    Decimal a = Decimal(arr1, 4);
+    Decimal b = Decimal(arr2, 3);
+    Decimal c = a + b;
+    a.show();
+    b.show();
+    c.show();
+}
