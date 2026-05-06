@@ -53,6 +53,12 @@ int main(void) {
         return -1;
     }
 
+    for (int i = 0; i < L; i++)
+        rows_with_segment[i] = 0;
+
+    for (int j = 0; j < K; j++)
+        cols_with_segment[j] = 0;
+
     // Отметить строки и столбцы, содержащие элемент в диапазоне [M; N]
     for (int i = 0; i < L; i++) {
         for (int j = 0; j < K; j++) {
@@ -74,15 +80,18 @@ int main(void) {
     // Модификация элементов
     for (int i = 0; i < L; i++) {
         for (int j = 0; j < K; j++) {
-            int count = 0;
-            for (int curi = 0; curi < L; curi++){
-                if (Acopy[i * K + j] == Acopy[curi * K + j])
-                    count++;
+            if (rows_with_segment[i] && cols_with_segment[j]) 
+            {
+                int count = 0;
+                for (int curi = 0; curi < L; curi++){
+                    if (Acopy[i * K + j] == Acopy[curi * K + j])
+                        count++;
+                }
+                if (count >= 2)
+                    A[i * K + j] = 1;
+                else
+                    A[i * K + j] = 0;
             }
-            if (count >= 2)
-                A[i * K + j] = 1;
-            else
-                A[i * K + j] = 0;
         }
     }
 

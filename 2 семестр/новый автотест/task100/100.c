@@ -27,10 +27,11 @@ int main(void)
         return -1;
     }
 
-    int *A = (int *)malloc(L * K * sizeof(double));
+    int *A = (int *)malloc(L * K * sizeof(int));
     if (!A)
     {
         fprintf(out, "ERROR\n");
+        free(A);
         fclose(in);
         fclose(out);
         return -1;
@@ -61,6 +62,12 @@ int main(void)
         fclose(out);
         return -1;
     }
+
+    for (int i = 0; i < L; i++)
+        rows_with_mod[i] = 0;
+
+    for (int j = 0; j < K; j++)
+        cols_with_mod[j] = 0;
 
     // Отметить строки и столбцы, содержащие элементы с остатком N по модулю M
     for (int i = 0; i < L; i++)

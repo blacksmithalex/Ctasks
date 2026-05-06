@@ -53,6 +53,12 @@ int main(void) {
         return -1;
     }
 
+    for (int i = 0; i < L; i++)
+        rows_with_mod[i] = 0;
+
+    for (int j = 0; j < K; j++)
+        cols_with_mod[j] = 0;
+
     // Отметить строки и столбцы, содержащие элементы с остатком N по модулю M
     for (int i = 0; i < L; i++) {
         for (int j = 0; j < K; j++) {
@@ -83,7 +89,6 @@ int main(void) {
                     A[i * K + j] = 1;
                 else
                     A[i * K + j] = 0;
-                    
                 }
             }
         }
